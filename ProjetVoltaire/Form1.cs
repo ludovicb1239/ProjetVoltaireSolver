@@ -136,7 +136,8 @@ namespace ProjetVoltaire
 
                     int width = GetStringWidth(text, font);
 
-                    if (width > 906) {
+                    if (width > 906)
+                    {
                         width -= 906;
                         startY += 30;
                     }

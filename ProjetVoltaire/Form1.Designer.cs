@@ -61,6 +61,7 @@
             label10 = new Label();
             DelayLabel = new Label();
             MistakesLabel = new Label();
+            label11 = new Label();
             ((System.ComponentModel.ISupportInitialize)delayTrackBar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)errorTrackBar).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -355,9 +356,9 @@
             DelayLabel.AutoSize = true;
             DelayLabel.Location = new Point(12, 247);
             DelayLabel.Name = "DelayLabel";
-            DelayLabel.Size = new Size(111, 15);
+            DelayLabel.Size = new Size(40, 15);
             DelayLabel.TabIndex = 30;
-            DelayLabel.Text = "Mode Automatique";
+            DelayLabel.Text = "temps";
             DelayLabel.TextAlign = ContentAlignment.TopCenter;
             // 
             // MistakesLabel
@@ -365,16 +366,26 @@
             MistakesLabel.AutoSize = true;
             MistakesLabel.Location = new Point(165, 247);
             MistakesLabel.Name = "MistakesLabel";
-            MistakesLabel.Size = new Size(111, 15);
+            MistakesLabel.Size = new Size(55, 15);
             MistakesLabel.TabIndex = 31;
-            MistakesLabel.Text = "Mode Automatique";
+            MistakesLabel.Text = "pourcent";
             MistakesLabel.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(12, 440);
+            label11.Name = "label11";
+            label11.Size = new Size(541, 75);
+            label11.TabIndex = 32;
+            label11.Text = resources.GetString("label11.Text");
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(841, 448);
+            ClientSize = new Size(841, 532);
+            Controls.Add(label11);
             Controls.Add(MistakesLabel);
             Controls.Add(DelayLabel);
             Controls.Add(label10);
@@ -407,8 +418,11 @@
             Controls.Add(AwnserLabel);
             Controls.Add(StartButton);
             Controls.Add(FindAwnserButton);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "Form1";
-            Text = "Form1";
+            Text = "Projet Voltaire";
             ((System.ComponentModel.ISupportInitialize)delayTrackBar).EndInit();
             ((System.ComponentModel.ISupportInitialize)errorTrackBar).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
@@ -452,5 +466,6 @@
         private Label label10;
         private Label DelayLabel;
         private Label MistakesLabel;
+        private Label label11;
     }
 }
