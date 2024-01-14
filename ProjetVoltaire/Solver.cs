@@ -45,11 +45,8 @@ namespace ProjetVoltaire
         {
             foreach (string s in reponses)
             {
-                int firstIndex = s.IndexOf("|");
-                int lastIndex = s.LastIndexOf("|");
-                string start = s.Substring(0, firstIndex);
-                string end = s.Substring(lastIndex+1);
-                if (AreSameStartAndEnd(phrase, start, end))
+                string[] split = Regex.Replace(s, @"\|.*?\|", "+").Split("+");
+                if (AreSameStartAndEnd(phrase, split))
                 {
                     bestMatch = s;
                     return true;
@@ -58,11 +55,11 @@ namespace ProjetVoltaire
             bestMatch = "";
             return false;
         }
-        static bool AreSameStartAndEnd(string str, string start, string end)
+        static bool AreSameStartAndEnd(string str, string[] contents)
         {
             // Trim leading and trailing spaces
-            start = start.Trim().Normalize();
-            end = end.Trim().Normalize();
+            for (int i = 0; i < contents.Length; i++)
+                contents[i] = contents[i].Trim().Normalize();
             str = str.Trim().Normalize();
 
             StringComparison comp = StringComparison.OrdinalIgnoreCase;
@@ -71,8 +68,12 @@ namespace ProjetVoltaire
                 Console.WriteLine($"Comparing :\n\"{ConvertStringToAscii(str)}\"\n\"{ConvertStringToAscii(start)}\" \"{ConvertStringToAscii(end)}\"");
                 Console.WriteLine($"Start equal : {str.StartsWith(start, comp)} End equal : {str.EndsWith(end, comp)}");
             }*/
-
-            return str.StartsWith(start, comp) && str.EndsWith(end, comp);
+            foreach(string s in contents)
+            {
+                if (!str.Contains(s, comp))
+                    return false;
+            }
+            return true;
         }
         static string ConvertStringToAscii(string input)
         {

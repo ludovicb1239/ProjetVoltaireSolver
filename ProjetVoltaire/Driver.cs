@@ -36,21 +36,32 @@ namespace ProjetVoltaire
 
         public Driver(string path)
         {
+            // Set up ChromeDriverService with a random port
+            ChromeDriverService service = ChromeDriverService.CreateDefaultService(path);
+            service.Port = 0;
             // Setting up the webdriver
+            Console.WriteLine("Starting Webdriver");
             driver = GetChromeDriver(path);
+            Console.WriteLine("Managing timeouts");
 
+            driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(20);
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(100);
+            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(100);
+
+            Console.WriteLine("Creating Devtools");
             var devTools = (IDevTools)driver;
             session = devTools.GetDevToolsSession();
+            Console.WriteLine("Session Openned");
 
             // Enable the Network domain
             domains = session.GetVersionSpecificDomains<OpenQA.Selenium.DevTools.V120.DevToolsSessionDomains>();
             domains.Network.Enable(new OpenQA.Selenium.DevTools.V120.Network.EnableCommandSettings());
             domains.Network.ResponseReceived += ResponseReceivedHandler;
 
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(100);
-
+            Console.WriteLine("Navigating");
             string baseUrl = "https://www.projet-voltaire.fr/";
             driver.Navigate().GoToUrl(baseUrl);
+            Console.WriteLine("All Done !");
         }
         static ChromeDriver GetChromeDriver(string path)
         {
@@ -58,7 +69,7 @@ namespace ProjetVoltaire
             chromeOptions.AddExcludedArgument("enable-logging");
             chromeOptions.AddArgument("--ignore-certificate-errors");
             chromeOptions.AddArgument("--start-maximized");
-            chromeOptions.AddArgument("user-data-dir=/profile");
+            chromeOptions.AddArgument($"user-data-dir={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "profile")}");
 
             return new ChromeDriver(path, chromeOptions);
         }

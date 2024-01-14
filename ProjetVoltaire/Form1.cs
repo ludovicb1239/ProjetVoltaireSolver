@@ -27,14 +27,17 @@ namespace ProjetVoltaire
         {
             InitializeComponent();
             this.FormClosed += Form1_FormClosed;
-
-            driver = new Driver(@"webdriver/chromedriver.exe");
-            driver.DataFound += AwnsersFound;
             solver = new("");
             UpdateButtonState();
 
             DelayLabel.Text = delayTrackBar.Value.ToString() + "s";
             MistakesLabel.Text = errorTrackBar.Value.ToString() + "%";
+
+            Task.Run(() =>
+            {
+                driver = new Driver(@"webdriver/chromedriver.exe");
+                driver.DataFound += AwnsersFound;
+            });
         }
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
