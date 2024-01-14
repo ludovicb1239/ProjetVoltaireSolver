@@ -1,15 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text.Json;
-using System.Text.RegularExpressions;
-using static System.Windows.Forms.AxHost;
-using System.Drawing;
-using System;
-
 namespace ProjetVoltaire
 {
     public partial class Form1 : Form

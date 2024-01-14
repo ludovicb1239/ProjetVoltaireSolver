@@ -1,28 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenQA.Selenium.Support.UI;
-using HtmlAgilityPack;
-using System;
-using System.Collections.Generic;
-using OpenQA.Selenium.Remote;
+﻿using HtmlAgilityPack;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.DevTools;
-using OpenQA.Selenium.DevTools.V120;
-using OpenQA.Selenium.DevTools.V120.Performance;
 using OpenQA.Selenium.DevTools.V120.Network;
-using System.IO;
-using System.Security.Policy;
-using System.Security.Cryptography;
-using System.Windows.Forms;
-using SeleniumExtras.WaitHelpers;
 using OpenQA.Selenium.Interactions;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
-using System.Diagnostics;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace ProjetVoltaire
 {
