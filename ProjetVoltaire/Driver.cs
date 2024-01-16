@@ -160,23 +160,34 @@ namespace ProjetVoltaire
             {
                 Console.WriteLine($"DriverError -> {ex}");
             }
+            bool foundSbutton = false;
+            bool foundPbutton = false;
+            IWebElement sbutton = null;
+            IWebElement pbutton = null;
             try
             {
-                IWebElement sbutton = parent.FindElement(By.CssSelector(".exitButton.secondaryButton"));
-                sbutton.Click();
+                sbutton = parent.FindElement(By.CssSelector(".exitButton.secondaryButton"));
+                foundSbutton = true;
             }
             catch (NoSuchElementException)
             {
-                try
-                {
-                    IWebElement pbutton = parent.FindElement(By.CssSelector(".exitButton.primaryButton"));
-                    pbutton.Click();
-                }
-                catch (NoSuchElementException)
-                {
-                    Console.WriteLine("DriverError -> The exit button was not found.");
-                }
+                foundSbutton = false;
             }
+            try
+            {
+                pbutton = parent.FindElement(By.CssSelector(".exitButton.primaryButton"));
+                foundPbutton = true;
+            }
+            catch (NoSuchElementException)
+            {
+                foundPbutton = false;
+            }
+            if (foundSbutton)
+                sbutton?.Click();
+            else if (foundPbutton)
+                pbutton?.Click();
+            else
+                Console.WriteLine("DriverError -> The exit button was not found.");
         }
         //0 - good
         //1 - bad

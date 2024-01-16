@@ -88,6 +88,10 @@ namespace ProjetVoltaire
             string pattern = @"\\x3C(B)\\x3E(.*?)\\x3C/B\\x3E";
             string replacement = "|$2|";
             input = Regex.Replace(input, pattern, replacement);
+            
+            pattern = "n\\x3CSUP\\x3Eos\\x3C/SUP\\x3E";
+            replacement = "n°";
+            input = Regex.Replace(input, pattern, replacement);
 
             pattern = @"\\x27";
             replacement = "'";
