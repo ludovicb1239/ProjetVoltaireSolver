@@ -121,7 +121,7 @@
     <value>À savoir:
 - Le programme automatique s'arrête automatiquement s'il voit qu'il a fait une erreur
 - Le programme n'est pas infaible, il se pourrait qu'il ne soit pas en mesure de bien corriger une erreur
-</value>
+-Un redémarrage du programe est recommandé après sa première ouverture</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

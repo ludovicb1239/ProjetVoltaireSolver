@@ -14,7 +14,7 @@ namespace ProjetVoltaire
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error -> {ex.Message}");
+                Console.WriteLine($"SolverError -> {ex.Message}");
                 isOK = false;
             }
         }
@@ -32,7 +32,7 @@ namespace ProjetVoltaire
             foreach (string reponse in reponses)
                 Console.WriteLine("Data -> " + reponse);
             */
-            Console.WriteLine($"Solver found {reponses.Count} Awnsers");
+            Console.WriteLine($"SolverInfo -> found {reponses.Count} Awnsers");
 
             return(reponses.Count > 5);
         }

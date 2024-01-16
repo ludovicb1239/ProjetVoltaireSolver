@@ -4,6 +4,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.DevTools;
 using OpenQA.Selenium.DevTools.V120.Network;
 using OpenQA.Selenium.Interactions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace ProjetVoltaire
 {
@@ -21,28 +22,28 @@ namespace ProjetVoltaire
             ChromeDriverService service = ChromeDriverService.CreateDefaultService(path);
             service.Port = 0;
             // Setting up the webdriver
-            Console.WriteLine("Starting Webdriver");
+            Console.WriteLine("DriverInfo -> Starting Webdriver");
             driver = GetChromeDriver(path);
-            Console.WriteLine("Managing timeouts");
+            Console.WriteLine("DriverInfo -> Managing timeouts");
 
             driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(20);
             driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(100);
             //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(100);
 
-            Console.WriteLine("Creating Devtools");
+            Console.WriteLine("DriverInfo -> Creating Devtools");
             var devTools = (IDevTools)driver;
             session = devTools.GetDevToolsSession();
-            Console.WriteLine("Session Openned");
+            Console.WriteLine("DriverInfo -> Session Openned");
 
             // Enable the Network domain
             domains = session.GetVersionSpecificDomains<OpenQA.Selenium.DevTools.V120.DevToolsSessionDomains>();
             domains.Network.Enable(new OpenQA.Selenium.DevTools.V120.Network.EnableCommandSettings());
             domains.Network.ResponseReceived += ResponseReceivedHandler;
 
-            Console.WriteLine("Navigating");
+            Console.WriteLine("DriverInfo -> Navigating");
             string baseUrl = "https://www.projet-voltaire.fr/";
             driver.Navigate().GoToUrl(baseUrl);
-            Console.WriteLine("All Done !");
+            Console.WriteLine("DriverInfo -> All Done !");
         }
         static ChromeDriver GetChromeDriver(string path)
         {
@@ -100,7 +101,7 @@ namespace ProjetVoltaire
                     if (chars > indx)
                     {
                         IWebElement wordElement = elementCollection[i];
-                        Console.WriteLine("clicking \"" + nodeCollection[i].InnerText + "\"");
+                        Console.WriteLine("DriverInfo -> clicking \"" + nodeCollection[i].InnerText + "\"");
                         wordElement.Click();
                         return;
                     }
@@ -110,14 +111,14 @@ namespace ProjetVoltaire
         }
         public void ClickNoMistakes()
         {
-            IWebElement button = driver.FindElement(By.Id("btn_question_suivante"));
-            if (button != null)
+            try
             {
+                IWebElement button = driver.FindElement(By.Id("btn_question_suivante"));
                 button.Click();
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("button not found hmmmm");
+                Console.WriteLine($"DriverError -> {ex}");
             }
             //IWebElement button = driver.FindElement(By.XPath("//div[@class='noMistakeButton']"));
             //button.Click();
@@ -126,6 +127,56 @@ namespace ProjetVoltaire
         {
             Actions actions = new Actions(driver);
             actions.SendKeys(OpenQA.Selenium.Keys.Enter).Perform();
+        }
+        public bool HasExercice()
+        {
+            //class intensiveTraining
+            IWebElement parent = driver.FindElement(By.XPath("//div[@class='sheetView']"));
+            return(IsElementPresentByClassName(parent, "intensiveTraining"));
+        }
+        public void ClickSkipExercice()
+        {
+            //class understoodButton
+            //class buttonKo
+            //class exitButton secondaryButton
+            Thread.Sleep(3000);
+
+            IWebElement parent = driver.FindElement(By.XPath("//div[@class='intensiveTraining']"));
+            try
+            {
+                IWebElement button = parent.FindElement(By.ClassName("understoodButton"));
+                button.Click();
+
+                IWebElement[] buttons = parent.FindElements(By.ClassName("buttonKo")).ToArray();
+                foreach (IWebElement bu in buttons)
+                        bu.Click();
+
+            }
+            catch (NoSuchElementException)
+            {
+                Console.WriteLine("DriverError -> Element not found");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"DriverError -> {ex}");
+            }
+            try
+            {
+                IWebElement sbutton = parent.FindElement(By.CssSelector(".exitButton.secondaryButton"));
+                sbutton.Click();
+            }
+            catch (NoSuchElementException)
+            {
+                try
+                {
+                    IWebElement pbutton = parent.FindElement(By.CssSelector(".exitButton.primaryButton"));
+                    pbutton.Click();
+                }
+                catch (NoSuchElementException)
+                {
+                    Console.WriteLine("DriverError -> The exit button was not found.");
+                }
+            }
         }
         //0 - good
         //1 - bad
@@ -168,6 +219,11 @@ namespace ProjetVoltaire
                 // Element not found
                 return false;
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DriverError -> {ex}");
+                return false;
+            }
         }
         private bool GetSentenceDiv(out HtmlNode sentenceNode, out IWebElement sentenceElement)
         {
@@ -186,26 +242,26 @@ namespace ProjetVoltaire
 
             if (e.Response.MimeType == "application/json" && e.Response.Url == targetUrl)
             {
-                Console.WriteLine("Found a response");
+                Console.WriteLine("DriverInfo -> Found a response");
 
                 // Try to get the response body with retries
                 var responseBody = await GetResponseBodyWithRetries(e.RequestId);
 
                 if (responseBody != null)
                 {
-                    Console.WriteLine("Length: " + responseBody.Body.Length);
+                    Console.WriteLine("DriverInfo -> Length: " + responseBody.Body.Length);
                     if (responseBody.Body.Length > 10000)
                     {
                         DataFound?.Invoke(this, responseBody.Body);
                     }
                     else
                     {
-                        Console.WriteLine("Response not long enough");
+                        Console.WriteLine("DriverInfo -> Response not long enough");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("Failed to retrieve response body.");
+                    Console.WriteLine("DriverWarning -> Failed to retrieve response body.");
                 }
             }
         }
@@ -222,7 +278,7 @@ namespace ProjetVoltaire
                 catch (CommandResponseException ex)
                 {
                     // Log or handle the exception if needed
-                    Console.WriteLine($"Attempt {attempt}: {ex.Message}");
+                    Console.WriteLine($"Driver -> Attempt {attempt}: {ex.Message}");
                 }
 
                 // Wait for a short duration before retrying

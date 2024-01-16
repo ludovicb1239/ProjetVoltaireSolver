@@ -46,10 +46,17 @@ namespace ProjetVoltaire
         }
         void DoTheThing()
         {
-            Thread.Sleep(50);
+            Thread.Sleep(500);
 
+            if (driver.HasExercice())
+            {
+                Console.WriteLine("Warning -> Popup exercice found");
+                driver.ClickSkipExercice();
+                Console.WriteLine("Info -> Popup exercice Done");
+            }
             if (!driver.IsExercice())
             {
+                Console.WriteLine("Warning -> No exercice found");
                 stop = true;
                 return;
             }
@@ -66,8 +73,6 @@ namespace ProjetVoltaire
 
             bool foundMatch = false;
             string p = "";
-            int startX = 0, startY = 0;
-
 
             if (!makingMistake)
             {
@@ -92,14 +97,11 @@ namespace ProjetVoltaire
 
                     //string text = p.Substring(0, firstIndex);
                     driver.ClickChar(averageIndex);
-
-                    Thread.Sleep(500);
-                    CheckResult();
-                    driver.ClickNext();
                 }
                 else
                 {
                     Console.WriteLine("Error -> No error found in matching data");
+                    return;
                 }
             }
             else
@@ -107,9 +109,18 @@ namespace ProjetVoltaire
                 Console.WriteLine("Info -> No match found");
 
                 driver.ClickNoMistakes();
+            }
 
-                Thread.Sleep(500);
-                CheckResult();
+            Thread.Sleep(500);
+            CheckResult();
+            if (driver.HasExercice())
+            {
+                Console.WriteLine("Warning -> Popup exercice found");
+                driver.ClickSkipExercice();
+                Console.WriteLine("Info -> Popup exercice Done");
+            }
+            else
+            {
                 driver.ClickNext();
             }
         }
@@ -129,7 +140,7 @@ namespace ProjetVoltaire
 
                     Console.WriteLine($"Info -> mistakes:{mistakes} right awnsers:{rightAwns}");
 
-                    stop = !makingMistake;
+                    //stop = !makingMistake;
                     break;
                 case 2: //dont know
                     Console.WriteLine("Return -> Cant get state");
