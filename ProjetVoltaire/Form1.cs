@@ -4,8 +4,10 @@ namespace ProjetVoltaire
     {
         Solver solver;
         Driver driver;
+        Thread workerThread;
 
         bool stop = false;
+        bool running = false;
 
         int mistakes = 0;
         int rightAwns = 0;
@@ -20,10 +22,12 @@ namespace ProjetVoltaire
 
             DelayLabel.Text = delayTrackBar.Value.ToString() + "s";
             MistakesLabel.Text = errorTrackBar.Value.ToString() + "%";
+            workerThread = new Thread(ThreadMain);
+            workerThread.IsBackground = true;
 
             Task.Run(() =>
             {
-                driver = new Driver(@"webdriver/chromedriver.exe");
+                driver = new Driver(@"chromedriver-win64/chromedriver.exe");
                 driver.DataFound += AwnsersFound;
             });
         }
@@ -36,7 +40,6 @@ namespace ProjetVoltaire
                 driver = null;
             }
         }
-
         private void FindButtonClicked(object sender, EventArgs e)
         {
             if (solver.GetBestMatch(driver.FindString(), out string match))
@@ -149,12 +152,11 @@ namespace ProjetVoltaire
                     break;
             }
         }
-        private void StartButtonClicked(object sender, EventArgs e)
+        private void ThreadMain()
         {
-            Task workerTask = Task.Run(() =>
+            running = true;
+            try
             {
-                Console.WriteLine("Info -> Starting");
-                stop = false;
                 while (!stop)
                 {
                     DoTheThing();
@@ -166,8 +168,30 @@ namespace ProjetVoltaire
                     }));
                     Thread.Sleep(delayTime);
                 }
-                Console.WriteLine("Info -> Stopped");
-            });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Thread threw an exception: {ex.Message}");
+            }
+            finally
+            {
+                running = false;
+                this.Invoke(new Action(() =>
+                {
+                    UpdateButtonState();
+                }));
+            }
+            Console.WriteLine("Info -> Stopped");
+        }
+        private void StartButtonClicked(object sender, EventArgs e)
+        {
+            Console.WriteLine("Info -> Starting");
+            if (running)
+                return;
+            running = true;
+            stop = false;
+            UpdateButtonState();
+            workerThread.Start();
         }
         private void StopButtonClicked(object sender, EventArgs e)
         {
@@ -185,8 +209,8 @@ namespace ProjetVoltaire
         private void UpdateButtonState()
         {
             FindAwnserButton.Enabled = solver.isOK;
-            StartButton.Enabled = solver.isOK;
-            StopButton.Enabled = solver.isOK;
+            StartButton.Enabled = solver.isOK && !running;
+            StopButton.Enabled = solver.isOK && running;
         }
         private void delayTrackBar_Scroll(object sender, EventArgs e)
         {

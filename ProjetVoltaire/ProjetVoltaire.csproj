@@ -37,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="webdriver\chromedriver.exe">
+    <None Update="chromedriver-win64\chromedriver.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="webdriver\chromedriverV85.exe">

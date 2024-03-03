@@ -28,10 +28,10 @@ namespace ProjetVoltaire
 
             reponses = reponses.Where(s => s.Length >= 8 && s.Length <= 200).ToList();
 
-            /*
+            
             foreach (string reponse in reponses)
                 Console.WriteLine("Data -> " + reponse);
-            */
+            
             Console.WriteLine($"SolverInfo -> found {reponses.Count} Awnsers");
 
             return(reponses.Count > 5);
@@ -91,6 +91,10 @@ namespace ProjetVoltaire
             
             pattern = "n\\x3CSUP\\x3Eos\\x3C/SUP\\x3E";
             replacement = "n°";
+            input = Regex.Replace(input, pattern, replacement);
+
+            pattern = "\\x3Cbr/\\x3Eou\\x3Cbr/\\x3E";
+            replacement = "\"";
             input = Regex.Replace(input, pattern, replacement);
 
             pattern = @"\\x27";

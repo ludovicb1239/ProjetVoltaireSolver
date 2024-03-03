@@ -187,15 +187,15 @@
             label11.AutoSize = true;
             label11.Location = new Point(12, 308);
             label11.Name = "label11";
-            label11.Size = new Size(541, 60);
+            label11.Size = new Size(541, 45);
             label11.TabIndex = 32;
-            label11.Text = resources.GetString("label11.Text");
+            label11.Text = "À savoir:\r\n- Un redémarrage du programe est recommandé après sa première ouverture\r\n- Le programme n'est pas infaible, il se pourrait qu'il ne soit pas en mesure de bien corriger une erreur";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(578, 377);
+            ClientSize = new Size(578, 373);
             Controls.Add(label11);
             Controls.Add(MistakesLabel);
             Controls.Add(DelayLabel);
